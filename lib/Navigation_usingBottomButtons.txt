@@ -1,0 +1,162 @@
+--main
+import 'package:flutter/material.dart';
+import 'package:learndart/fp.dart'; // Main Page (Profile Page)
+import 'package:learndart/sp.dart'; // Settings Page
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/main': (context) => const Fp(), // Main Page (Profile Page)
+        '/settings': (context) => const Second(), // Settings Page
+      },
+      home: const HomePage(), // Home Page widget
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  static const List<Widget> _pages = [
+    Fp(), // Main Page (Profile Page)
+    Second(), // Settings Page
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home Page'),
+        backgroundColor: Colors.blue,
+      ),
+      drawer: Drawer(
+        backgroundColor: const Color.fromARGB(255, 241, 146, 117),
+        child: Column(
+          children: [
+            const DrawerHeader(
+              child: Text(
+                'Navigation Menu',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.home,
+                color: Colors.white,
+                size: 40,
+              ),
+              title: const Text(
+                'Home',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.pop(context); // Stay on home page
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.settings,
+                color: Colors.white,
+                size: 40,
+              ),
+              title: const Text(
+                'Settings',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                Navigator.pushNamed(
+                    context, '/settings'); // Navigate to Settings
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.pages,
+                color: Colors.white,
+                size: 40,
+              ),
+              title: const Text(
+                'Main Page',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                Navigator.pushNamed(context, '/main'); // Navigate to Main Page
+              },
+            ),
+          ],
+        ),
+      ),
+      body: _pages[_selectedIndex], // Show the selected page
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex, // Track selected tab
+        onTap: _onItemTapped, // Handle tab change
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile', // Main Page
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings', // Settings Page
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+--fp
+import 'package:flutter/material.dart';
+
+class Fp extends StatelessWidget {
+  const Fp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: Text('Welcome to the Profile!'),
+      ),
+    );
+  }
+}
+
+--sp
+import 'package:flutter/material.dart';
+
+class Second extends StatelessWidget {
+  const Second({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: Text('Welcome to the Settings page!'),
+      ),
+    );
+  }
+}
